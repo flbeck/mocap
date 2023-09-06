@@ -72,13 +72,14 @@ const
 {
   geometry_msgs::msg::Pose rviz_pose;
   if (mocap_system_ == "optitrack") {
-    rviz_pose.position.x = -mocap_pose.position.y;
-    rviz_pose.position.y = mocap_pose.position.x;
-    rviz_pose.position.z = mocap_pose.position.z;
-    rviz_pose.orientation.x = mocap_pose.orientation.x;
-    rviz_pose.orientation.y = -mocap_pose.orientation.y;
-    rviz_pose.orientation.z = mocap_pose.orientation.z;
-    rviz_pose.orientation.w = mocap_pose.orientation.w;
+    //rviz_pose.position.x = -mocap_pose.position.y;
+    //rviz_pose.position.y = mocap_pose.position.x;
+    //rviz_pose.position.z = mocap_pose.position.z;
+    //rviz_pose.orientation.x = mocap_pose.orientation.x;
+    //rviz_pose.orientation.y = -mocap_pose.orientation.y;
+    //rviz_pose.orientation.z = mocap_pose.orientation.z;
+    //rviz_pose.orientation.w = mocap_pose.orientation.w;
+    rviz_pose = mocap_pose; // this transform should happen in the marker, not in the visual
   } else if (mocap_system_ == "vicon") {
     // TO-DO:
     rviz_pose = mocap_pose;
