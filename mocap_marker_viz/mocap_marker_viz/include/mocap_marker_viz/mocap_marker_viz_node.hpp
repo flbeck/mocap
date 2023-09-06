@@ -35,6 +35,10 @@
 #include "mocap_marker_viz_srvs/srv/set_marker_color.hpp"
 #include "mocap_marker_viz_srvs/srv/reset_marker_color.hpp"
 
+// add publisher of transform
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <tf2_ros/transform_broadcaster.h>
+
 typedef mocap_marker_viz_srvs::srv::SetMarkerColor SetMarkerColor;
 typedef mocap_marker_viz_srvs::srv::ResetMarkerColor ResetMarkerColor;
 typedef std::shared_ptr<mocap_marker_viz_srvs::srv::SetMarkerColor::Request> SetRequest;
@@ -64,6 +68,8 @@ private:
 
   rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr publisher_rb_;
   rclcpp::Subscription<mocap_msgs::msg::RigidBodies>::SharedPtr markers_subscription_rb_;
+
+  std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
   geometry_msgs::msg::Vector3 marker_scale_;
   float marker_lifetime_;

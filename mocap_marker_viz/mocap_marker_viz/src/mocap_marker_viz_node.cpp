@@ -61,6 +61,8 @@ MarkerVisualizer::MarkerVisualizer()
 
   publisher_rb_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
     "visualization_marker_rb", 1000);
+
+  tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(*this);
 }
 
 
@@ -150,6 +152,27 @@ MarkerVisualizer::rb_callback(const mocap_msgs::msg::RigidBodies::SharedPtr msg)
   }
 
   publisher_rb_->publish(visual_markers_rb);
+
+  // publish markers as ROS tf2
+  geometry_msgs::msg::TransformStamped t;
+
+  for (const mocap_msgs::msg::RigidBody & rb : msg->rigidbodies) {
+    t.header = msg->header;
+    t.child_frame_id = "rigid_body_" + rb.rigid_body_name;
+
+    auto pose = mocap2rviz(rb.pose);
+
+    t.transform.translation.x = pose.position.x;
+    t.transform.translation.y = pose.position.y;
+    t.transform.translation.z = pose.position.z;
+    
+    t.transform.rotation.x = pose.orientation.x;
+    t.transform.rotation.y = pose.orientation.y;
+    t.transform.rotation.z = pose.orientation.z;
+    t.transform.rotation.w = pose.orientation.w;
+
+    tf_broadcaster_->sendTransform(t);
+  }
 }
 
 
